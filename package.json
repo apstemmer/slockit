@@ -1,0 +1,16 @@
+{
+  "name": "ether",
+  "version": "1.0.0",
+  "description": "playing with Ethereum",
+  "main": "config.js",
+  "dependencies": {
+    "truffle": "^3.2.5",
+    "web3": "^0.19.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Arthur Stemmer",
+  "license": "ISC"
+}
