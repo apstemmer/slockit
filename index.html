@@ -8,7 +8,7 @@
   <script type="text/javascript">
   window.addEventListener('load', function() {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-  let eventSpace = document.getElementsByClassName('eventspace');
+
     if (typeof web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
       window.web3 = new Web3(web3.currentProvider);
@@ -18,33 +18,35 @@
       window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
-  function fireSlider(address){
-    let topPos = Math.random()*95;
-    let slideElem = document.createElement("div");
-    slideElem.className = "slide-elem";
-    slideElem.innerHTML = address;
-    slideElem.style.top = topPos + '%';
-    eventSpace[0].appendChild(slideElem);
-    $(slideElem).animate({left: "100%"}, 300000, function(){
-      this.remove();
-      console.log('finished scrolling');
+    let eventSpace = document.getElementsByClassName('eventspace');
+
+    function fireSlider(address){
+      let topPos = Math.random()*95;
+      let slideElem = document.createElement("div");
+      slideElem.className = "slide-elem";
+      slideElem.innerHTML = address;
+      slideElem.style.top = topPos + '%';
+      eventSpace[0].appendChild(slideElem);
+      $(slideElem).animate({left: "100%"}, 300000, function(){
+        this.remove();
+        console.log('finished scrolling');
+      });
+    }
+
+    fireSlider('0xA7F3659c53820346176f7E0E350780DF304db179');
+
+    var ENSAdress = '0x314159265dD8dbb310642f98f50C066173C1259b';
+    var filter = web3.eth.filter({fromBlock:0, toBlock: 'latest', address: ENSAdress, 'topics': [web3.sha3('NewOwner(bytes32,bytes32,address)')]});
+
+    console.log(filter);
+    filter.watch(function(error, result){
+      if(!error){
+        fireSlider('0x'+result.data.substr(26));
+        console.log(error,result);
+      }
     });
 
-  }
-  fireSlider('0xA7F3659c53820346176f7E0E350780DF304db179');
-  // Now you can start your app & access web3 freely:
-  var ENSAdress = '0x314159265dD8dbb310642f98f50C066173C1259b';
-  var filter = web3.eth.filter({fromBlock:0, toBlock: 'latest', address: ENSAdress, 'topics': [web3.sha3('NewOwner(bytes32,bytes32,address)')]});
-
-  console.log(filter);
-  filter.watch(function(error, result){
-    if(!error){
-      fireSlider('0x'+result.data.substr(26));
-      console.log(error,result);
-    }
-  });
-
-  });
+    });
   </script>
   </head>
   <body>
@@ -59,19 +61,3 @@
 
   </body>
 </html>
-<!--//var web3_provider = 'http://localhost:8545';
-
-//Infura provider
-//https://mainnet.infura.io/fGX3Znz5UrNYiEybAHEz
-// mainnet ENS: 0x314159265dD8dbb310642f98f50C066173C1259b
-
-if (web3.net.listening) console.log('listening to Ethereum');
-
-console.log(web3.accounts);
-
-var filter = web3.eth.filter({fromBlock:0, toBlock: 'latest', address: ENSAdress, 'topics': web3.sha3('NewOwner(bytes32,bytes32,address)')});
-
-filter.watch(function(error, result){
-  console.log(error, result);
-});
--->
